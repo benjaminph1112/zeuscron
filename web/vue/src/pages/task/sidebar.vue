@@ -1,12 +1,6 @@
 <template>
   <el-aside width="150px">
-    <el-menu
-      :default-active="currentRoute"
-      mode="vertical"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-      router>
+    <el-menu :default-active="currentRoute" mode="vertical" router>
       <el-menu-item index="/task">定时任务</el-menu-item>
       <el-menu-item index="/task/log">任务日志</el-menu-item>
     </el-menu>

@@ -8,11 +8,11 @@ import (
 	"github.com/go-macaron/binding"
 	"github.com/go-sql-driver/mysql"
 	"github.com/lib/pq"
-	"github.com/ouqiang/gocron/internal/models"
-	"github.com/ouqiang/gocron/internal/modules/app"
-	"github.com/ouqiang/gocron/internal/modules/setting"
-	"github.com/ouqiang/gocron/internal/modules/utils"
-	"github.com/ouqiang/gocron/internal/service"
+	"zeuscron/internal/models"
+	"zeuscron/internal/modules/app"
+	"zeuscron/internal/modules/setting"
+	"zeuscron/internal/modules/utils"
+	"zeuscron/internal/service"
 	"gopkg.in/macaron.v1"
 )
 

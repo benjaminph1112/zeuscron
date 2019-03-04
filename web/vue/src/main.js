@@ -3,12 +3,14 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import '@/styles/index.scss'
+
 import App from './App'
 import router from './router'
 import store from './store/index'
 
 Vue.config.productionTip = false
-Vue.use(ElementUI)
+Vue.use(ElementUI) // global css
 
 Vue.directive('focus', {
   inserted: function (el) {
@@ -34,11 +36,11 @@ Vue.filter('formatTime', function (time) {
   const date = new Date(time)
 
   const result = date.getFullYear() + '-' +
-  (fillZero(date.getMonth() + 1)) + '-' +
-  fillZero(date.getDate()) + ' ' +
-  fillZero(date.getHours()) + ':' +
-  fillZero(date.getMinutes()) + ':' +
-  fillZero(date.getSeconds())
+    (fillZero(date.getMonth() + 1)) + '-' +
+    fillZero(date.getDate()) + ' ' +
+    fillZero(date.getHours()) + ':' +
+    fillZero(date.getMinutes()) + ':' +
+    fillZero(date.getSeconds())
 
   if (result.indexOf('20') !== 0) {
     return ''

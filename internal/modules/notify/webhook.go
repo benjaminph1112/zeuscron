@@ -4,10 +4,10 @@ import (
 	"html"
 	"time"
 
-	"github.com/ouqiang/gocron/internal/models"
-	"github.com/ouqiang/gocron/internal/modules/httpclient"
-	"github.com/ouqiang/gocron/internal/modules/logger"
-	"github.com/ouqiang/gocron/internal/modules/utils"
+	"zeuscron/internal/models"
+	"zeuscron/internal/modules/httpclient"
+	"zeuscron/internal/modules/logger"
+	"zeuscron/internal/modules/utils"
 )
 
 type WebHook struct{}

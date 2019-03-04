@@ -1,6 +1,6 @@
 FROM golang:1.10-alpine as builder
 
-WORKDIR /go/src/github.com/ouqiang/gocron
+WORKDIR /go/src/zeuscron
 
 COPY . .
 
@@ -22,7 +22,7 @@ RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 WORKDIR /app
 
-COPY --from=builder /go/src/github.com/ouqiang/gocron/bin/gocron .
+COPY --from=builder /go/src/zeuscron/bin/gocron .
 
 RUN chown -R app:app ./
 

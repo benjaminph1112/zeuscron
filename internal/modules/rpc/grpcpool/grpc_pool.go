@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ouqiang/gocron/internal/modules/app"
-	"github.com/ouqiang/gocron/internal/modules/rpc/auth"
+	"zeuscron/internal/modules/app"
+	"zeuscron/internal/modules/rpc/auth"
 	"github.com/silenceper/pool"
 	"google.golang.org/grpc"
 )

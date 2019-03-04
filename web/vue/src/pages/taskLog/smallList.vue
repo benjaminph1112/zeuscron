@@ -1,38 +1,13 @@
 <template>
   <el-container>
-    <task-sidebar></task-sidebar>
     <el-main>
       <el-form :inline="true">
-        <el-form-item label="任务ID">
-          <el-input v-model.trim="searchParams.task_id"></el-input>
-        </el-form-item>
-        <el-form-item label="执行方式">
-          <el-select v-model.trim="searchParams.protocol" placeholder="执行方式">
-            <el-option label="全部" value=""></el-option>
-            <el-option v-for="item in protocolList" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model.trim="searchParams.status">
-            <el-option label="全部" value=""></el-option>
-            <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search()">搜索</el-button>
+          <el-button type="primary" icon="el-icon-refresh" @click="search()">重载</el-button>
+          <el-button type="danger" icon="el-icon-close" @click="clearLog(id)">清空日志</el-button>
         </el-form-item>
       </el-form>
-      <el-row type="flex" justify="end">
-        <el-col :span="3">
-          <el-button type="danger" v-if="this.$store.getters.user.isAdmin" @click="clearLog(0)">清空日志</el-button>
-        </el-col>
-        <el-col :span="2">
-          <el-button type="info" @click="refresh">刷新</el-button>
-        </el-col>
-      </el-row>
-      <el-pagination background layout="prev, pager, next, sizes, total" :total="logTotal" :page-size="20" @size-change="changePageSize" @current-change="changePage" @prev-click="changePage" @next-click="changePage">
+      <el-pagination background layout="prev, pager, next, sizes, total" :total="logTotal" :page-size="searchParams.page_size" @size-change="changePageSize" @current-change="changePage" @prev-click="changePage" @next-click="changePage">
       </el-pagination>
       <el-table :data="logs" border ref="table" style="width: 100%">
         <el-table-column type="expand">
@@ -102,17 +77,21 @@
 </template>
 
 <script>
-import taskSidebar from '../task/sidebar'
 import taskLogService from '../../api/taskLog'
 
 export default {
   name: 'task-log',
+  props: {
+    id: {
+      required: true
+    }
+  },
   data () {
     return {
       logs: [],
       logTotal: 0,
       searchParams: {
-        page_size: 20,
+        page_size: 5,
         page: 1,
         task_id: '',
         protocol: '',
@@ -154,12 +133,11 @@ export default {
       ]
     }
   },
-  components: { taskSidebar },
   created () {
-    if (this.$route.query.task_id) {
-      this.searchParams.task_id = this.$route.query.task_id
+    if (this.id !== '') {
+      this.searchParams.task_id = this.id
+      this.search()
     }
-    this.search()
   },
   methods: {
     formatProtocol (row, col) {

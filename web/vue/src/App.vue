@@ -1,18 +1,22 @@
 <template>
-  <el-container>
-    <el-header>
-      <app-header></app-header>
-      <app-nav-menu></app-nav-menu>
-    </el-header>
-    <el-main >
-      <div id="main-container" v-cloak>
-        <router-view/>
-      </div>
-    </el-main>
-    <el-footer>
+  <div id="app">
+    <div class="app-wrapper">
+      <el-container>
+        <el-header>
+          <!-- <app-header></app-header> -->
+          <app-nav-menu></app-nav-menu>
+        </el-header>
+        <el-main>
+          <div id="main-container" v-cloak>
+            <router-view />
+          </div>
+        </el-main>
+        <!-- <el-footer>
       <app-footer></app-footer>
-    </el-footer>
-  </el-container>
+    </el-footer> -->
+      </el-container>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -40,31 +44,3 @@ export default {
   }
 }
 </script>
-<style>
-  [v-cloak] {
-    display: none !important;
-  }
-  body {
-    margin:0;
-  }
-  .el-header {
-    padding:0;
-    margin:0;
-  }
-  .el-container {
-    padding:0;
-    margin:0;
-    width: 100%;
-  }
-  .el-main {
-    padding:0;
-    margin:0;
-  }
-  #main-container .el-main {
-    height: calc(100vh - 116px);
-    margin:20px 20px 0 20px;
-  }
-  .el-aside .el-menu {
-    height: 100%;
-  }
-</style>

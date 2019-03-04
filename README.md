@@ -1,11 +1,14 @@
+# 版权说明
+本仓库fork自`https://github.com/ouqiang/gocron`,做了一些修改
+
 # gocron - 定时任务管理系统
 [![Build Status](https://travis-ci.org/ouqiang/gocron.png)](https://travis-ci.org/ouqiang/gocron)
-[![Downloads](https://img.shields.io/github/downloads/ouqiang/gocron/total.svg)](https://github.com/ouqiang/gocron/releases)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/ouqiang/gocron/blob/master/LICENSE)
-[![Release](https://img.shields.io/github/release/ouqiang/gocron.svg?label=Release)](https://github.com/ouqiang/gocron/releases)
+[![Downloads](https://img.shields.io/github/downloads/ouqiang/gocron/total.svg)](https://zeuscron/releases)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/benjaminph1112/zeuscron/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/release/ouqiang/gocron.svg?label=Release)](https://github.com/benjaminph1112/zeuscron/releases)
 
 # 项目简介
-使用Go语言开发的轻量级定时任务集中调度和管理系统, 用于替代Linux-crontab [查看文档](https://github.com/ouqiang/gocron/wiki)
+使用Go语言开发的轻量级定时任务集中调度和管理系统, 用于替代Linux-crontab [查看文档](https://github.com/benjaminph1112/zeuscron/wiki)
 
 原有的延时任务拆分为独立项目[延迟队列](https://github.com/ouqiang/delay-queue)  
 
@@ -37,9 +40,9 @@
 
 
 ## 下载
-[releases](https://github.com/ouqiang/gocron/releases)  
+[releases](https://github.com/benjaminph1112/zeuscron/releases)  
 
-[版本升级](https://github.com/ouqiang/gocron/wiki/版本升级)
+[版本升级](https://github.com/benjaminph1112/zeuscron/wiki/版本升级)
 
 ## 安装
 
@@ -57,7 +60,7 @@
 
 ### 源码安装
 - 安装Go 1.9+
-- `go get -d github.com/ouqiang/gocron`
+- `go get -d github.com/benjaminph1112/zeuscron`
 - 编译 `make`
 - 启动
     * gocron `./bin/gocron web`
@@ -132,7 +135,7 @@ docker run --name gocron --link mysql:db -p 5920:5920 -d ouqg/gocron
 * RPC框架 [gRPC](https://github.com/grpc/grpc)
 
 ## 反馈
-提交[issue](https://github.com/ouqiang/gocron/issues/new)
+提交[issue](https://github.com/benjaminph1112/zeuscron/issues/new)
 
 ## ChangeLog
 

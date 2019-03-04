@@ -9,10 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ouqiang/gocron/internal/modules/logger"
-	"github.com/ouqiang/gocron/internal/modules/setting"
-	"github.com/ouqiang/gocron/internal/modules/utils"
-	"github.com/ouqiang/goutil"
+	"zeuscron/internal/modules/logger"
+	"zeuscron/internal/modules/setting"
+	"zeuscron/internal/modules/utils"
 )
 
 var (
@@ -38,7 +37,7 @@ var (
 func InitEnv(versionString string) {
 	logger.InitLogger()
 	var err error
-	AppDir, err = goutil.WorkDir()
+	AppDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -54,6 +53,9 @@ func InitEnv(versionString string) {
 // IsInstalled 判断应用是否已安装
 func IsInstalled() bool {
 	_, err := os.Stat(filepath.Join(ConfDir, "/install.lock"))
+	if err != nil {
+		logger.Errorf("判断应用是否已经安装,err=%s",err.Error())
+	}
 	if os.IsNotExist(err) {
 		return false
 	}
@@ -65,7 +67,7 @@ func IsInstalled() bool {
 func CreateInstallLock() error {
 	_, err := os.Create(filepath.Join(ConfDir, "/install.lock"))
 	if err != nil {
-		logger.Error("创建安装锁文件conf/install.lock失败")
+		logger.Error("创建安装锁文件conf/install.lock失败,err="+err.Error())
 	}
 
 	return err

@@ -3,11 +3,11 @@ package tasklog
 // 任务日志
 
 import (
-	"github.com/ouqiang/gocron/internal/models"
-	"github.com/ouqiang/gocron/internal/modules/logger"
-	"github.com/ouqiang/gocron/internal/modules/utils"
-	"github.com/ouqiang/gocron/internal/routers/base"
-	"github.com/ouqiang/gocron/internal/service"
+	"zeuscron/internal/models"
+	"zeuscron/internal/modules/logger"
+	"zeuscron/internal/modules/utils"
+	"zeuscron/internal/routers/base"
+	"zeuscron/internal/service"
 	"gopkg.in/macaron.v1"
 )
 
@@ -32,8 +32,15 @@ func Index(ctx *macaron.Context) string {
 
 // 清空日志
 func Clear(ctx *macaron.Context) string {
+	taskId := ctx.QueryInt("task_id")
+
 	taskLogModel := new(models.TaskLog)
-	_, err := taskLogModel.Clear()
+	var err error
+	if taskId == 0 {
+		_, err = taskLogModel.Clear()
+	} else {
+		_, err = taskLogModel.ClearByTaskID(taskId)
+	}
 	json := utils.JsonResponse{}
 	if err != nil {
 		return json.CommonFailure(utils.FailureContent)

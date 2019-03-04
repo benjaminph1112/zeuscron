@@ -10,13 +10,13 @@ import (
 	"time"
 
 	"github.com/jakecoffman/cron"
-	"github.com/ouqiang/gocron/internal/models"
-	"github.com/ouqiang/gocron/internal/modules/app"
-	"github.com/ouqiang/gocron/internal/modules/httpclient"
-	"github.com/ouqiang/gocron/internal/modules/logger"
-	"github.com/ouqiang/gocron/internal/modules/notify"
-	rpcClient "github.com/ouqiang/gocron/internal/modules/rpc/client"
-	pb "github.com/ouqiang/gocron/internal/modules/rpc/proto"
+	"zeuscron/internal/models"
+	"zeuscron/internal/modules/app"
+	"zeuscron/internal/modules/httpclient"
+	"zeuscron/internal/modules/logger"
+	"zeuscron/internal/modules/notify"
+	rpcClient "zeuscron/internal/modules/rpc/client"
+	pb "zeuscron/internal/modules/rpc/proto"
 )
 
 var (

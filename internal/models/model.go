@@ -9,9 +9,9 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
-	"github.com/ouqiang/gocron/internal/modules/app"
-	"github.com/ouqiang/gocron/internal/modules/logger"
-	"github.com/ouqiang/gocron/internal/modules/setting"
+	"zeuscron/internal/modules/app"
+	"zeuscron/internal/modules/logger"
+	"zeuscron/internal/modules/setting"
 	"gopkg.in/macaron.v1"
 )
 

@@ -24,7 +24,7 @@ type TaskLog struct {
 	Status     Status       `json:"status" xorm:"tinyint notnull index default 1"`    // 状态 0:执行失败 1:执行中  2:执行完毕 3:任务取消(上次任务未执行完成) 4:异步执行
 	Result     string       `json:"result" xorm:"mediumtext notnull default '' "`     // 执行结果
 	TotalTime  int          `json:"total_time" xorm:"-"`                              // 执行总时长
-	BaseModel  `json:"-" xorm:"-"`
+	BaseModel               `json:"-" xorm:"-"`
 }
 
 func (taskLog *TaskLog) Create() (insertId int64, err error) {
@@ -64,6 +64,11 @@ func (taskLog *TaskLog) List(params CommonMap) ([]TaskLog, error) {
 // 清空表
 func (taskLog *TaskLog) Clear() (int64, error) {
 	return Db.Where("1=1").Delete(taskLog)
+}
+
+// 清空表
+func (taskLog *TaskLog) ClearByTaskID(id int) (int64, error) {
+	return Db.Where("task_id = ?", id).Delete(taskLog)
 }
 
 // 删除N个月前的日志

@@ -1,0 +1,81 @@
+@import './variables.scss';
+// @import './mixin.scss';
+@import './transition.scss';
+@import './element-ui.scss';
+// @import './sidebar.scss';
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+html {
+  box-sizing: border-box;
+  background-color: #F0F2F5;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+div:focus{
+  outline: none;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+//main-container全局样式
+.app-main{
+  min-height: 100%
+}
+
+.app-container {
+  padding: 20px;
+}
+
+.report {
+  &-red {
+    color: #ff6666;
+    font-weight: bold;
+  }
+  &-green {
+    color: #00CC00;
+    font-weight: bold;
+  }
+}
+
+// .table-header{
+//   font-weight: bold;
+//   background-color: #f0f0f0 !important;
+//   background-image: linear-gradient(to bottom, #f0f0f0, #dfdfdf);
+// }
+
+.mt10 {
+  margin-top: 10px;
+}
