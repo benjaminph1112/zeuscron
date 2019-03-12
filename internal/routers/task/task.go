@@ -16,13 +16,14 @@ import (
 
 type TaskForm struct {
 	Id               int
-	Level            models.TaskLevel `binding:"Required;In(1,2)"`
+	Level            models.TaskLevel      `binding:"Required;In(1,2)"`
 	DependencyStatus models.TaskDependencyStatus
 	DependencyTaskId string
-	Name             string `binding:"Required;MaxSize(32)"`
+	Name             string                `binding:"Required;MaxSize(32)"`
 	Spec             string
 	Protocol         models.TaskProtocol   `binding:"In(1,2)"`
 	Command          string                `binding:"Required;MaxSize(256)"`
+	CommandArgs      string                `binding:"MaxSize(255)"`
 	HttpMethod       models.TaskHTTPMethod `binding:"In(1,2)"`
 	Timeout          int                   `binding:"Range(0,86400)"`
 	Multi            int8                  `binding:"In(1,2)"`
@@ -31,8 +32,8 @@ type TaskForm struct {
 	HostId           string
 	Tag              string
 	Remark           string
-	NotifyStatus     int8 `binding:"In(1,2,3,4)"`
-	NotifyType       int8 `binding:"In(1,2,3,4)"`
+	NotifyStatus     int8                  `binding:"In(1,2,3,4)"`
+	NotifyType       int8                  `binding:"In(1,2,3,4)"`
 	NotifyReceiverId string
 	NotifyKeyword    string
 }
@@ -104,6 +105,7 @@ func Store(ctx *macaron.Context, form TaskForm) string {
 	taskModel.Name = form.Name
 	taskModel.Protocol = form.Protocol
 	taskModel.Command = strings.TrimSpace(form.Command)
+	taskModel.CommandArgs = strings.TrimSpace(form.CommandArgs)
 	taskModel.Timeout = form.Timeout
 	taskModel.Tag = form.Tag
 	taskModel.Remark = form.Remark
@@ -126,7 +128,7 @@ func Store(ctx *macaron.Context, form TaskForm) string {
 	}
 	taskModel.HttpMethod = form.HttpMethod
 	if taskModel.Protocol == models.TaskHTTP {
-		command := strings.ToLower(taskModel.Command)
+		command := strings.ToLower(taskModel.GetCommand())
 		if !strings.HasPrefix(command, "http://") && !strings.HasPrefix(command, "https://") {
 			return json.CommonFailure("请输入正确的URL地址")
 		}
@@ -228,12 +230,14 @@ func Disable(ctx *macaron.Context) string {
 // 手动运行任务
 func Run(ctx *macaron.Context) string {
 	id := ctx.ParamsInt(":id")
+	args := ctx.Query("args")
 	json := utils.JsonResponse{}
 	taskModel := new(models.Task)
 	task, err := taskModel.Detail(id)
 	if err != nil || task.Id <= 0 {
 		return json.CommonFailure("获取任务详情失败", err)
 	}
+	task.CommandArgs = args
 
 	task.Spec = "手动运行"
 	service.ServiceTask.Run(task)

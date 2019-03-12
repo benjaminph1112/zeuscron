@@ -23,6 +23,9 @@
         {{item.alias}} - {{item.name}}:{{item.port}} <br>
       </div>
     </el-form-item> <br>
+    <el-form-item label="参数:" style="width: 100%">
+      {{record.command_args}}
+    </el-form-item> <br>
     <el-form-item label="命令:" style="width: 100%">
       {{record.command}}
     </el-form-item> <br>

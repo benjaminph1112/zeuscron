@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <task-sidebar></task-sidebar>
+    <!-- <task-sidebar></task-sidebar> -->
     <el-main>
       <el-form :inline="true">
         <el-row>
@@ -96,14 +96,33 @@
           <template slot-scope="scope">
             <el-button-group>
               <el-button type="primary" @click="toEdit(scope.row)">编辑</el-button>
-              <el-button type="success" @click="runTask(scope.row)">手动执行</el-button>
-              <el-button type="info" @click="jumpToLog(scope.row)">查看日志</el-button>
+              <el-button type="success" @click="showRunTask(scope.row)">手动执行</el-button>
+              <!-- <el-button type="info" @click="jumpToLog(scope.row)">查看日志</el-button> -->
               <el-button type="danger" @click="remove(scope.row)">删除</el-button>
             </el-button-group>
           </template>
         </el-table-column>
       </el-table>
     </el-main>
+
+    <el-dialog title="手动执行" :visible.sync="dialogVisible">
+      <span>
+        <el-row>
+          <el-col :span="16">
+            <el-input type="input" size="medium" width="100" placeholder="请输入命令行参数" v-model="runRecord.command_args">
+            </el-input>
+          </el-col>
+        </el-row>
+        <el-row>
+          {{runRecord.command | parseCommand(runRecord.command_args)}}
+        </el-row>
+      </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="runTask">确 定</el-button>
+      </span>
+    </el-dialog>
+
   </el-container>
 </template>
 
@@ -122,6 +141,8 @@ export default {
   },
   data () {
     return {
+      dialogVisible: false,
+      runRecord: {},
       tasks: [],
       hosts: [],
       taskTotal: 0,
@@ -201,9 +222,15 @@ export default {
         }
       })
     },
-    runTask (item) {
+    showRunTask (item) {
+      this.dialogVisible = true
+      this.runRecord = item
+    },
+    runTask () {
+      let item = this.runRecord
+      let args = item.command_args
       this.$appConfirm(() => {
-        taskService.run(item.id, () => {
+        taskService.run(item.id, args, () => {
           this.$message.success('任务已开始执行')
         })
       }, true)
@@ -231,6 +258,23 @@ export default {
         path = `/task/edit/${item.id}`
       }
       this.$router.push(path)
+    }
+  },
+  filters: {
+    parseCommand (a, b) {
+      if (typeof a === 'undefined' || typeof b === 'undefined') {
+        return ''
+      }
+      try {
+        let args = b.split('|')
+        let cmd = a
+        args.forEach((ele, index) => {
+          cmd = cmd.replace('{$' + (index + 1) + '}', ele)
+        })
+        return cmd
+      } catch (e) {
+        this.$alert(e)
+      }
     }
   }
 }

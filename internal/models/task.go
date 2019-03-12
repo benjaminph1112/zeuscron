@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-xorm/xorm"
+	"fmt"
 )
 
 type TaskProtocol int8
@@ -46,6 +47,7 @@ type Task struct {
 	Spec             string               `json:"spec" xorm:"varchar(64) notnull"`                            // crontab
 	Protocol         TaskProtocol         `json:"protocol" xorm:"tinyint notnull index"`                      // 协议 1:http 2:系统命令
 	Command          string               `json:"command" xorm:"varchar(256) notnull"`                        // URL地址或shell命令
+	CommandArgs      string               `json:"command_args" xorm:"varchar(255) notnull"`                   // URL地址或shell命令对应参数，从1开始计数，替换 {$1}、{$2}
 	HttpMethod       TaskHTTPMethod       `json:"http_method" xorm:"tinyint notnull default 1"`               // http请求方法
 	Timeout          int                  `json:"timeout" xorm:"mediumint notnull default 0"`                 // 任务执行超时时间(单位秒),0不限制
 	Multi            int8                 `json:"multi" xorm:"tinyint notnull default 1"`                     // 是否允许多实例运行
@@ -60,13 +62,23 @@ type Task struct {
 	Status           Status               `json:"status" xorm:"tinyint notnull index default 0"` // 状态 1:正常 0:停止
 	Created          time.Time            `json:"created" xorm:"datetime notnull created"`       // 创建时间
 	Deleted          time.Time            `json:"deleted" xorm:"datetime deleted"`               // 删除时间
-	BaseModel        `json:"-" xorm:"-"`
-	Hosts            []TaskHostDetail `json:"hosts" xorm:"-"`
-	NextRunTime      time.Time        `json:"next_run_time" xorm:"-"`
+	BaseModel                             `json:"-" xorm:"-"`
+	Hosts            []TaskHostDetail     `json:"hosts" xorm:"-"`
+	NextRunTime      time.Time            `json:"next_run_time" xorm:"-"`
 }
 
 func taskHostTableName() []string {
 	return []string{TablePrefix + "task_host", "th"}
+}
+
+//提供命令行参数支持
+func (task *Task) GetCommand() string {
+	args := strings.Split(task.CommandArgs, "|")
+	cmd := task.Command
+	for index, row := range args {
+		cmd = strings.Replace(cmd, fmt.Sprintf("{$%d}", index+1), row, -1)
+	}
+	return cmd
 }
 
 // 新增
@@ -81,7 +93,7 @@ func (task *Task) Create() (insertId int, err error) {
 
 func (task *Task) UpdateBean(id int) (int64, error) {
 	return Db.ID(id).
-		Cols(`name,spec,protocol,command,timeout,multi,
+		Cols(`name,spec,protocol,command,command_args,timeout,multi,
 			retry_times,retry_interval,remark,notify_status,
 			notify_type,notify_receiver_id, dependency_task_id, dependency_status, tag,http_method, notify_keyword`).
 		Update(task)

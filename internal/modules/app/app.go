@@ -41,10 +41,10 @@ func InitEnv(versionString string) {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	ConfDir = filepath.Join(AppDir, "/conf")
-	LogDir = filepath.Join(AppDir, "/log")
-	AppConfig = filepath.Join(ConfDir, "/app.ini")
-	VersionFile = filepath.Join(ConfDir, "/.version")
+	ConfDir = filepath.Join(AppDir, "conf")
+	LogDir = filepath.Join(AppDir, "log")
+	AppConfig = filepath.Join(ConfDir, "app.ini")
+	VersionFile = filepath.Join(ConfDir, ".version")
 	createDirIfNotExists(ConfDir, LogDir)
 	Installed = IsInstalled()
 	VersionId = ToNumberVersion(versionString)
@@ -52,7 +52,7 @@ func InitEnv(versionString string) {
 
 // IsInstalled 判断应用是否已安装
 func IsInstalled() bool {
-	_, err := os.Stat(filepath.Join(ConfDir, "/install.lock"))
+	_, err := os.Stat(filepath.Join(ConfDir, "install.lock"))
 	if err != nil {
 		logger.Errorf("判断应用是否已经安装,err=%s",err.Error())
 	}
@@ -65,7 +65,7 @@ func IsInstalled() bool {
 
 // CreateInstallLock 创建安装锁文件
 func CreateInstallLock() error {
-	_, err := os.Create(filepath.Join(ConfDir, "/install.lock"))
+	_, err := os.Create(filepath.Join(ConfDir, "install.lock"))
 	if err != nil {
 		logger.Error("创建安装锁文件conf/install.lock失败,err="+err.Error())
 	}

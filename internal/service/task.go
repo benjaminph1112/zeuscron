@@ -218,15 +218,15 @@ func (h *HTTPHandler) Run(taskModel models.Task, taskUniqueId int64) (result str
 	}
 	var resp httpclient.ResponseWrapper
 	if taskModel.HttpMethod == models.TaskHTTPMethodGet {
-		resp = httpclient.Get(taskModel.Command, taskModel.Timeout)
+		resp = httpclient.Get(taskModel.GetCommand(), taskModel.Timeout)
 	} else {
-		urlFields := strings.Split(taskModel.Command, "?")
+		urlFields := strings.Split(taskModel.GetCommand(), "?")
 		taskModel.Command = urlFields[0]
 		var params string
 		if len(urlFields) >= 2 {
 			params = urlFields[1]
 		}
-		resp = httpclient.PostParams(taskModel.Command, params, taskModel.Timeout)
+		resp = httpclient.PostParams(taskModel.GetCommand(), params, taskModel.Timeout)
 	}
 	// 返回状态码非200，均为失败
 	if resp.StatusCode != http.StatusOK {
@@ -242,7 +242,7 @@ type RPCHandler struct{}
 func (h *RPCHandler) Run(taskModel models.Task, taskUniqueId int64) (result string, err error) {
 	taskRequest := new(pb.TaskRequest)
 	taskRequest.Timeout = int32(taskModel.Timeout)
-	taskRequest.Command = taskModel.Command
+	taskRequest.Command = taskModel.GetCommand()
 	taskRequest.Id = taskUniqueId
 	resultChan := make(chan TaskResult, len(taskModel.Hosts))
 	for _, taskHost := range taskModel.Hosts {
@@ -279,7 +279,7 @@ func createTaskLog(taskModel models.Task, status models.Status) (int64, error) {
 	taskLogModel.Name = taskModel.Name
 	taskLogModel.Spec = taskModel.Spec
 	taskLogModel.Protocol = taskModel.Protocol
-	taskLogModel.Command = taskModel.Command
+	taskLogModel.Command = taskModel.GetCommand()
 	taskLogModel.Timeout = taskModel.Timeout
 	if taskModel.Protocol == models.TaskRPC {
 		aggregationHost := ""
@@ -335,9 +335,9 @@ func createJob(taskModel models.Task) cron.FuncJob {
 		concurrencyQueue.Add()
 		defer concurrencyQueue.Done()
 
-		logger.Infof("开始执行任务#%s#命令-%s", taskModel.Name, taskModel.Command)
+		logger.Infof("开始执行任务#%s#命令-%s", taskModel.Name, taskModel.GetCommand())
 		taskResult := execJob(handler, taskModel, taskLogId)
-		logger.Infof("任务完成#%s#命令-%s", taskModel.Name, taskModel.Command)
+		logger.Infof("任务完成#%s#命令-%s", taskModel.Name, taskModel.GetCommand())
 		afterExecJob(taskModel, taskResult, taskLogId)
 	}
 
@@ -367,7 +367,7 @@ func beforeExecJob(taskModel models.Task) (taskLogId int64) {
 		logger.Error("任务开始执行#写入任务日志失败-", err)
 		return
 	}
-	logger.Debugf("任务命令-%s", taskModel.Command)
+	logger.Debugf("任务命令-%s", taskModel.GetCommand())
 
 	return taskLogId
 }
