@@ -242,7 +242,7 @@ func (m *Migration) upgradeFor151(session *xorm.Session) error {
 
 	tableName := TablePrefix + "task"
 	// task表增加字段 command_args
-	sql := fmt.Sprintf("ALTER TABLE %s ADD COLUMN `command_args` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' AFTER `command`;", tableName)
+	sql := fmt.Sprintf("ALTER TABLE %s ADD COLUMN `command_args` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' AFTER `command`;", tableName)
 	_, err := session.Exec(sql)
 
 	if err != nil {

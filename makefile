@@ -1,5 +1,5 @@
 .PHONY: build
-build: gocron node
+build: build-vue statik gocron node
 
 .PHONY: build-race
 build-race: enable-race build
